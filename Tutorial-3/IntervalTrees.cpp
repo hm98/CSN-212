@@ -43,11 +43,11 @@ node *Func(node* root)
 	return temp;
 }
 
-node *maxUpdate(node* root)
+node *upd(node* root)
 {
 	if(root==NULL)	return NULL;
-	maxUpdate(root->left);
-	maxUpdate(root->right);
+	upd(root->left);
+	upd(root->right);
 	if(root->right!=NULL)
 	{
 		if((root->left)!=NULL)
@@ -102,15 +102,24 @@ node *del(node* root, pii in)
 		root->in = temp->in;
 		root->right = del(root->right, temp->in);
 	}
-	root = maxUpdate(root);
+	root = upd(root);
 	return root;
 }
 
 pii *search(node *root, pii in) 
 {
-	if(root==NULL)	return NULL;
-	if(root->in.F<=in.S && in.F<=root->in.S)	return &(root->in);
-	if(root->left!=NULL && root->left->maxi >= in.F)	return search(root->left, in);
+	if(root==NULL)
+	{
+		return NULL;
+	}
+	if(root->in.F<=in.S && in.F<=root->in.S)
+	{
+		return &(root->in);
+	}
+	if(root->left!=NULL && root->left->maxi >= in.F)
+	{
+		return search(root->left, in);
+	}
 	return search(root->right, in);
 }
 
@@ -127,16 +136,19 @@ void Display(node *root)
 
 int main()
 {
-	int n, l, r;
-	cin >> n;
-	for(int i = 1; i<=n; i++)
-	{
-		cin >> l >> r;
-		root = insert(root, mp(l, r));
-	}
+	root = insert(root, mp(15, 20));
+	root = insert(root, mp(10, 30));
+	root = insert(root, mp(17, 19));
+	root = insert(root, mp(5, 20));
+	root = insert(root, mp(12, 15));
+	root = insert(root, mp(30, 40));
 	Display(root);
-	pii *ans = search(root, mp(6, 7));
+	pii *ans = search(root, mp(14,16));
 	cout << ans->F << " " << ans->S << "\n";
+	ans = search(root, mp(21, 23));
+	cout << ans->F << " " << ans->S << "\n";
+	root = del(root, mp(30, 40));
+	Display(root);
 
 	return 0;
 }
